@@ -98,10 +98,6 @@ func (app *application) uploadFile(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, fmt.Sprintf("/upload/%d", id), http.StatusSeeOther)
 }
 
-func (app *application) allUploads(w http.ResponseWriter, r *http.Request) {
-
-}
-
 func (app *application) showUpload(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
 	if err != nil || id < 1 {
@@ -132,4 +128,29 @@ func (app *application) showUpload(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, err)
 	}
+}
+
+func (app *application) allUploads(w http.ResponseWriter, r *http.Request) {
+	u, err := app.uploads.All()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	data := &templateData{Uploads: u}
+	files := []string{
+		"./ui/uploads.tmpl",
+		"./ui/base.tmpl",
+	}
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	err = ts.Execute(w, data)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
 }

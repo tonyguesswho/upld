@@ -1,0 +1,28 @@
+{{template "base" .}} {{define "title"}}Uploads{{ end }}
+{{define "main"}}
+<h2>All Uploads</h2>
+{{if .Uploads}}
+<table>
+  <tr>
+    <th>Filename</th>
+    <th>Filesize</th>
+    <th>Upload Date</th>
+    <th>Initial Filename</th>
+    <th>ID</th>
+  </tr>
+  {{range .Uploads }}
+  <tr>
+    <td>
+      <a href="/upload/{{.ID}}">{{.Filename}}</a>
+    </td>
+    <td>{{.Filesize}}</td>
+    <td>{{.Created}}</td>
+    <td>{{.Initialfilename}}</td>
+    <td>#{{.ID}}</td>
+  </tr>
+  {{ end }}
+</table>
+
+{{else}}
+<p>No uploads yet</p>
+{{ end }} {{ end }}
