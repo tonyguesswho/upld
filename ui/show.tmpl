@@ -1,0 +1,19 @@
+{{template "base" .}}
+
+{{define "title"}}
+Upload #{{.Upload.ID}}
+{{ end }}
+
+{{define "main"}}
+<div class="upload">
+  <div class="metadata">
+    <strong>Filename : {{.Upload.Filename}}</strong> <span>#{{.Upload.ID}}</span>
+  </div>
+  <pre><code>Filesize : {{.Upload.Filesize}}</code></pre>
+  <pre><code>Filetype : {{.Upload.Filetype}}</code></pre>
+  <div class="metadata">
+    <time>Upload date: : {{.Upload.Created}}</time>
+  </div>
+  <div><img src="/tmp/{{.Upload.Filename}}" alt=""></div>
+</div>
+{{ end }}

@@ -1,13 +1,17 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"text/template"
+
+	models "github.com/tonyguesswho/upld/pkg"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -99,5 +103,33 @@ func (app *application) allUploads(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) showUpload(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get(":id"))
+	if err != nil || id < 1 {
+		app.notFound(w)
+		return
+	}
 
+	u, err := app.uploads.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
+	files := []string{
+		"./ui/show.tmpl",
+		"./ui/base.tmpl",
+	}
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	data := &templateData{Upload: u}
+	err = ts.Execute(w, data)
+	if err != nil {
+		app.serverError(w, err)
+	}
 }
