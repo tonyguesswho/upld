@@ -1,0 +1,13 @@
+{{template "base" .}}
+
+{{define "title"}}
+Uploader
+{{ end }}
+
+{{define "main"}}
+<form enctype="multipart/form-data" action="/upload" method="post">
+  <input type="hidden" name="auth" value="{{.}}" />
+  <input type="file" name="myFile" />
+  <input type="submit" value="upload" />
+</form>
+{{ end }}
