@@ -6,9 +6,9 @@
     ```
     go run ./web
     ```
-- default port is 4000 
-- use the addr flag to set a diffiernent port
-
+- The default port is 4000 
+- use the addr flag to set a different port
+example
 ```
 go run ./cmd/web -addr=":9000" 
 
